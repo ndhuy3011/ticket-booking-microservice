@@ -1,0 +1,62 @@
+flowchart LR
+
+    subgraph External
+        U[User App Web]
+        P[Partner API]
+    end
+
+    subgraph Edge
+        APIGW[API Gateway]
+        AuthZ[Auth Service JWT]
+    end
+
+
+    subgraph Services
+        US[User Service]
+        MS[Movie Service]
+        BS[Booking Service]
+        PS[Payment Service]
+        NS[Notification Service]
+        Auth[Auth Service Internal]
+    end
+
+
+    subgraph Infra
+        Kafka[(Kafka)]
+        Redis[(Redis Cache)]
+        DBUser[(User DB)]
+        DBMovie[(Movie DB)]
+        DBBooking[(Booking DB)]
+        DBPayment[(Payment DB)]
+        ELK[(ELK / Loki)]
+        Prom[Prometheus]
+        Graf[Grafana]
+    end
+
+
+    U -->|HTTPS| APIGW
+    P -->|HTTPS| APIGW
+    APIGW --> AuthZ
+    APIGW --> US
+    APIGW --> MS
+    APIGW --> BS
+    APIGW --> PS
+
+
+    MS --> DBMovie
+    US --> DBUser
+    BS --> DBBooking
+    PS --> DBPayment
+    BS -->|produce: ticket.locked/ticket.booked| Kafka
+    PS -->|produce: payment.succeeded/payment.failed| Kafka
+    Kafka --> NS
+    NS -->|send email/sms| U
+
+
+    MS -->|cache reads/writes| Redis
+    BS -->|cache seat locks| Redis
+
+
+    Services --> ELK
+    Services --> Prom
+    Prom --> Graf
