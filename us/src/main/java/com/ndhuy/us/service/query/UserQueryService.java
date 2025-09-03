@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ndhuy.us.dao.UserDao;
 import com.ndhuy.us.dto.UserDto.InfoQueryInUserDto;
 import com.ndhuy.us.dto.UserDto.InfoQueryOutUserDto;
+import com.ndhuy.us.dto.UserDto.LoginInUserDto;
+import com.ndhuy.us.dto.UserDto.LoginOutUserDto;
 import com.ndhuy.us.service.IUserQueryService;
 
 import jakarta.annotation.Resource;
@@ -21,9 +23,16 @@ class UserQueryService implements IUserQueryService {
     @Override
     public InfoQueryOutUserDto findByUsername(InfoQueryInUserDto input) {
         var user = userDao.findByUsername(input.username(), true);
-
         return new InfoQueryOutUserDto(user.getUsername(), StringUtils.join(",", user.getAuthorities()));
+    }
 
+    @Override
+    public LoginOutUserDto findByUsernameAndPassword(LoginInUserDto input) {
+        var user = userDao.findByUsername(input.username(), true);
+        if (user.getPwd().matches(input.password())) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+        return new LoginOutUserDto(user.getUsername(), StringUtils.join(",", user.getAuthorities()));
     }
 
 }

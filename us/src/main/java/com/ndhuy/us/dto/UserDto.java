@@ -16,6 +16,11 @@ public class UserDto {
 
     public record CreateOutUserDto(String username) {
     }
+
+    public record LoginInUserDto(String username,String password) {
+    }
+    public record LoginOutUserDto(String username,String role){}
+
     public record InfoQueryInUserDto(String username) {
     }
 

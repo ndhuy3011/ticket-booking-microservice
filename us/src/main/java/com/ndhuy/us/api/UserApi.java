@@ -15,6 +15,8 @@ import com.ndhuy.us.dto.UserDto.CreateInUserDto;
 import com.ndhuy.us.dto.UserDto.CreateOutUserDto;
 import com.ndhuy.us.dto.UserDto.InfoQueryInUserDto;
 import com.ndhuy.us.dto.UserDto.InfoQueryOutUserDto;
+import com.ndhuy.us.dto.UserDto.LoginInUserDto;
+import com.ndhuy.us.dto.UserDto.LoginOutUserDto;
 import com.ndhuy.us.service.IUserCreateService;
 import com.ndhuy.us.service.IUserQueryService;
 
@@ -29,13 +31,17 @@ public class UserApi {
     IUserQueryService userQueryService;
 
     @PostMapping("/register")
-    
+    @PublicEndpoint
     public ResponseEntity<CreateOutUserDto> postCreateUser(@RequestBody CreateInUserDto entity) {
         return new ResponseEntity<>(userCreateService.createUserCustomer(entity), HttpStatus.CREATED);
     }
+    @PostMapping("/login")
+    public ResponseEntity<LoginOutUserDto> postUsernameAndPassword(@RequestBody LoginInUserDto entity) {
+        return new ResponseEntity<>(userQueryService.findByUsernameAndPassword(entity), HttpStatus.OK);
+    }
+    
 
     @PostMapping("/info")
-    @PublicEndpoint
     public ResponseEntity<InfoQueryOutUserDto> postGetUser(@RequestBody InfoQueryInUserDto entity) {
         return new ResponseEntity<>(userQueryService.findByUsername(entity), HttpStatus.OK);
     }
