@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ndhuy.us.annotation.PublicEndpoint;
 import com.ndhuy.us.dto.UserDto.CreateInUserDto;
 import com.ndhuy.us.dto.UserDto.CreateOutUserDto;
 import com.ndhuy.us.dto.UserDto.InfoQueryInUserDto;
@@ -28,11 +29,13 @@ public class UserApi {
     IUserQueryService userQueryService;
 
     @PostMapping("/register")
+    
     public ResponseEntity<CreateOutUserDto> postCreateUser(@RequestBody CreateInUserDto entity) {
         return new ResponseEntity<>(userCreateService.createUserCustomer(entity), HttpStatus.CREATED);
     }
 
     @PostMapping("/info")
+    @PublicEndpoint
     public ResponseEntity<InfoQueryOutUserDto> postGetUser(@RequestBody InfoQueryInUserDto entity) {
         return new ResponseEntity<>(userQueryService.findByUsername(entity), HttpStatus.OK);
     }
