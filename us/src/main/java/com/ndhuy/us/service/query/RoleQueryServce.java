@@ -1,6 +1,7 @@
 package com.ndhuy.us.service.query;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ndhuy.us.constants.RoleConst;
 import com.ndhuy.us.dao.RoleDao;
@@ -12,6 +13,7 @@ import com.ndhuy.us.service.IRoleQueryService;
 import jakarta.annotation.Resource;
 
 @Service
+@Transactional(readOnly = true,isolation = org.springframework.transaction.annotation.Isolation.READ_UNCOMMITTED)
 class RoleQueryServce  implements IRoleQueryService{
     @Resource RoleDao roleDao;
 

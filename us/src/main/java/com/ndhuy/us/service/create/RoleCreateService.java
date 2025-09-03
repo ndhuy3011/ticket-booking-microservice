@@ -13,10 +13,12 @@ import com.ndhuy.us.valueobject.Description;
 import com.ndhuy.us.valueobject.RoleName;
 
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Transactional
+@Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+@Slf4j
 class RoleCreateService implements IRoleCreateService {
     @Resource
     private RoleDao roleDao;
@@ -50,6 +52,7 @@ class RoleCreateService implements IRoleCreateService {
      */
     @Override
     public void addRoleCustomer(String userId) {
+        log.info("Add role customer to userId: {}", userId);
         roleDefault();
         roleAUserDao.insert(RoleConst.DEFAULT_ROLE, userId);
 

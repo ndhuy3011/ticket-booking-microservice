@@ -9,7 +9,7 @@ import com.ndhuy.us.entity.Role;
 import com.ndhuy.us.valueobject.RoleName;
 
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

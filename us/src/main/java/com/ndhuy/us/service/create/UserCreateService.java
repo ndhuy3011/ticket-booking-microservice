@@ -12,10 +12,12 @@ import com.ndhuy.us.valueobject.Password;
 import com.ndhuy.us.valueobject.Username;
 
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
-@Transactional
+@Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
 @Service
+@Slf4j
 class UserCreate implements IUserCreateService {
 
     @Resource
@@ -33,7 +35,7 @@ class UserCreate implements IUserCreateService {
      */
     @Override
     public CreateOutUserDto createUserCustomer(CreateInUserDto input) {
-
+        log.info("Create user customer: {}", input);
         var user = userDao.insert(User.builder()
                 .userId(Username.of(input.username()))
                 .pwd(Password.of(input.password()))

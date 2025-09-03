@@ -9,10 +9,12 @@ import com.ndhuy.us.entity.RoleAUser;
 import com.ndhuy.us.entity.RoleAUser.RoleAUserId;
 
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
  class IRoleAUserDao implements RoleAUserDao {
 
     @Resource
@@ -52,7 +54,6 @@ import jakarta.transaction.Transactional;
      */
     public void beforeInsert(RoleAUser roleAUser) {
         checkNull(roleAUser);
-
         roleAUserRepository.findById(roleAUser.getRoleAUserId()).ifPresent(e -> {
             throw new IllegalArgumentException(String.format("RoleAUser already exists: (roleName: %s, username: %s)",
                     roleAUser.getRoleAUserId().getRole(), roleAUser.getRoleAUserId().getUsername()));
@@ -70,6 +71,7 @@ import jakarta.transaction.Transactional;
     @Override
     public RoleAUser insert(String roleName, String username) {
 
+        log.info("Insert roleAUser: (roleName: {}, username: {})", roleName, username);
         var role = roleDao.findByName(roleName, true);
 
         var user = userDao.findByUsername(username, true);
@@ -92,6 +94,7 @@ import jakarta.transaction.Transactional;
      */
     @Override
     public void delete(String roleName, String username) {
+        log.info("Delete roleAUser: (roleName: {}, username: {})", roleName, username);
         var roleAUserId = RoleAUserId.builder(userDao.findByUsername(username).getUserId(),
                 roleDao.findByName(roleName).getRoleId());
 

@@ -9,10 +9,12 @@ import com.ndhuy.us.entity.User;
 import com.ndhuy.us.valueobject.Username;
 
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 class IUserDao implements UserDao {
 
     @Resource
@@ -62,6 +64,7 @@ class IUserDao implements UserDao {
      */
     @Override
     public User insert(User user) {
+        log.info("Insert user: {}", user);
         beforeInsert(user);
     
         return userRepository.save(user);
@@ -109,6 +112,7 @@ class IUserDao implements UserDao {
      */
     @Override
     public User update(User userNew) {
+        log.info("Update user: {}", userNew);
         beforeUpdate(userNew);
         var userOld = lockByUsername(userNew.getUsername());
         compareUsers(userOld, userNew);
@@ -139,6 +143,7 @@ class IUserDao implements UserDao {
      */
     @Override
     public User findByUsername(String username, boolean exception) {
+        log.info("Find user by username: {}, exception: {}", username, exception);
         if (exception) {
             return userRepository.findById(Username.of(username))
                     .orElseThrow(() -> new IllegalArgumentException("Username not found: " + username));
@@ -154,6 +159,7 @@ class IUserDao implements UserDao {
      */
     @Override
     public User findByUsername(String username) {
+        log.info("Find user by username: {}", username);
         return findByUsername(username, false);
     }
 
@@ -166,6 +172,7 @@ class IUserDao implements UserDao {
      */
     @Override
     public User lockByUsername(String username) {
+        log.info("Lock user by username: {}", username);
         return userRepository.findByUsername(Username.of(username))
                 .orElseThrow(() -> new IllegalArgumentException("Username not found: " + username));
     }
