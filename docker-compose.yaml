@@ -1,24 +1,25 @@
-    version: '3.8'
-    services:
-      db:
-        image: postgres:17.6 # Or your desired PostgreSQL version
-        restart: always
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 3011
-          POSTGRES_DB: postgres
-        ports:
-          - "5432:5432" # Host_port:Container_port
-        volumes:
-          - pgdata:/var/lib/postgresql/data # Persistent data volume
-      redis:
-        image: redis:latest # Specifies the Redis image to use
-        container_name: booking # Optional: Assigns a custom name to the container
-        ports:
-          - "6379:6379" # Maps port 6379 on the host to port 6379 in the container
-        volumes:
-          - redis_data:/data # Persists Redis data to a named volume
-        restart: always # Ensures Redis restarts automatically if it stops
+version: "3.8"
+services:
+  db:
+    image: postgres:17.6 # Or your desired PostgreSQL version
+    restart: always
+    container_name: db_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 3011
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432" # Host_port:Container_port
     volumes:
-      pgdata:
-      redis_data:
+      - pgdata:/var/lib/postgresql/data # Persistent data volume
+  redis:
+    image: redis:latest # Specifies the Redis image to use
+    container_name: db_redis # Optional: Assigns a custom name to the container
+    ports:
+      - "6379:6379" # Maps port 6379 on the host to port 6379 in the container
+    volumes:
+      - redis_data:/data # Persists Redis data to a named volume
+    restart: always # Ensures Redis restarts automatically if it stops
+volumes:
+  pgdata:
+  redis_data:

@@ -1,12 +1,15 @@
 package com.ndhuy.us.dao;
 
-import org.springframework.stereotype.Service;
+import com.ndhuy.us.entity.User;
 
-import jakarta.annotation.Resource;
+public interface UserDao {
+    public User insert(User user);
 
-@Service
-public class UserDao {
-    @Resource
-    private UserDao userDao;
+    public User update(User user);
 
+    public User findByUsername(String username);
+
+    public User findByUsername(String username, boolean exception);
+
+    public User lockByUsername(String username);
 }

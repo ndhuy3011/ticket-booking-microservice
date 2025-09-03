@@ -1,5 +1,6 @@
 package com.ndhuy.us.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,6 +20,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,18 +32,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleAUser implements java.io.Serializable {
+@Builder
+public class RoleAUser extends BaseEntity  {
     @EmbeddedId
-    private RoleAUserId id;
+    private RoleAUserId roleAUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("username")
-    @JoinColumn(name = "username", referencedColumnName = "value")
+    @JoinColumn(name = "username", referencedColumnName = "username")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("role")
-    @JoinColumn(name = "role", referencedColumnName = "roleName")
+    @JoinColumn(name = "role", referencedColumnName = "role")
     private Role role;
 
     @CreationTimestamp
@@ -49,20 +52,34 @@ public class RoleAUser implements java.io.Serializable {
     @Column(name = "create_date", nullable = false, updatable = false)
     private Date createDate;
 
+    public static RoleAUser builder(User user, Role role) {
+        var roleAUser = new RoleAUser();
+        roleAUser.setUser(user);
+        roleAUser.setRole(role);
+        roleAUser.setRoleAUserId(new RoleAUserId(user.getUserId(), role.getRoleId()));
+        return roleAUser;
+    }
+
     @Embeddable
     @Getter
     @Setter
     @EqualsAndHashCode
-    public class RoleAUserId implements java.io.Serializable {
+    @AllArgsConstructor
+    public static class RoleAUserId implements Serializable {
+        private static final long serialVersionUID = 1L;
         private Username username;
         private RoleName role;
 
         public String getRole() {
-            return role.getRoleName();
+            return role.getValue();
         }
 
         public String getUsername() {
-            return username.getUsername();
+            return username.getValue();
+        }
+
+        public static RoleAUserId builder(Username username, RoleName role) {
+            return new RoleAUserId(username, role);
         }
     }
 }

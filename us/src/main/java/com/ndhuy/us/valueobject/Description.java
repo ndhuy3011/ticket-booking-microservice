@@ -1,13 +1,19 @@
 package com.ndhuy.us.valueobject;
 
-public class Description {
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+
+@Value
+@EqualsAndHashCode(callSuper = true)
+public class Description  extends ValueObjectBase{
     private String value;
 
-    public Description(String description) {
+    private Description(String description) {
         this.value = description;
     }
 
-    public String getDescription() {
-        return value;
+    public static Description of(String description) {
+
+        return new Description(description);
     }
 }

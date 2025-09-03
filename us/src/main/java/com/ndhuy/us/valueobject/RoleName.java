@@ -1,13 +1,21 @@
 package com.ndhuy.us.valueobject;
 
-public class RoleName implements java.io.Serializable {
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+
+@Value
+@EqualsAndHashCode(callSuper = true)
+public class RoleName extends ValueObjectBase {
     private String value;
 
-    public RoleName(String roleName) {
-        this.value = roleName;
+    private RoleName(String value) {
+        this.value = value;
     }
 
-    public String getRoleName() {
-        return value;
+    public static RoleName of(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Role name is null or empty");
+        }
+        return new RoleName(name);
     }
 }

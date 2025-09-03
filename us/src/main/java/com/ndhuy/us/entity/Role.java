@@ -23,20 +23,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Role implements java.io.Serializable {
-
+public class Role extends BaseEntity {
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "role", nullable = false, length = 50, unique = true))
-    private RoleName roleName;
+    private RoleName roleId;
 
     @AttributeOverride(name = "value", column = @Column(name = "description", nullable = false, length = 50, unique = false))
-    private transient Description roleDesc;
+    private Description roleDesc;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<RoleAUser> roleAUsers;
-
-    public String getRoleName() {
-        return roleName.getRoleName();
-    }
 
 }

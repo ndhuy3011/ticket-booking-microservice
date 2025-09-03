@@ -19,22 +19,27 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "us_users")
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+@Builder
+public class User extends BaseEntity implements UserDetails {
+
 
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "username", nullable = false, length = 50, unique = true))
-    private Username username;
+    private Username userId;
 
     @AttributeOverride(name = "value", column = @Column(name = "password", nullable = false, length = 50, unique = false))
-    private Password password;
+    private Password pwd;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<RoleAUser> roleAUsers;
@@ -43,16 +48,22 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (RoleAUser role : roleAUsers) {
-            authorities.add(new SimpleGrantedAuthority(role.getId().getRole()));
+            authorities.add(new SimpleGrantedAuthority(role.getRoleAUserId().getRole()));
         }
         return authorities;
     }
 
+    public void updatePassword(String newPassword) {
+        this.pwd = Password.of(newPassword);
+
+    }
+
     public String getUsername() {
-        return username.getUsername();
+        return userId.getValue();
     }
 
     public String getPassword() {
-        return password.getPassword();
+        return pwd.getValue();
     }
+
 }
