@@ -14,5 +14,5 @@ import jakarta.transaction.Transactional;
 interface UserRepository extends JpaRepository<User, Username> {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public Optional<User> findByUsername(Username username);
+    public Optional<User> findByUserId(Username username);
 }

@@ -14,5 +14,5 @@ import jakarta.transaction.Transactional;
 interface RoleRepository extends JpaRepository<Role, RoleName> {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public Optional<Role> findByRoleName(RoleName roleName);
+    public Optional<Role> findByRoleId(RoleName roleId);
 }

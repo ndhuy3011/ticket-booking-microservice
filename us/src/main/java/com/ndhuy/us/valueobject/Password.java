@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Password extends ValueObjectBase{
 
     private String value;
@@ -29,5 +29,14 @@ public class Password extends ValueObjectBase{
             throw new IllegalArgumentException(PASSWORD_NOT_NULL_OR_EMPTY);
         }
         return new Password(bCryptPasswordEncoder.encode(password));
+    }
+    public static boolean matches(String rawPassword, String encodedPassword) {
+        if (rawPassword == null || rawPassword.isEmpty()) {
+            throw new IllegalArgumentException(PASSWORD_NOT_NULL_OR_EMPTY);
+        }
+        if (encodedPassword == null || encodedPassword.isEmpty()) {
+            throw new IllegalArgumentException(PASSWORD_NOT_NULL_OR_EMPTY);
+        }
+        return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
     }
 }

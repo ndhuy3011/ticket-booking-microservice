@@ -173,7 +173,7 @@ class IUserDao implements UserDao {
     @Override
     public User lockByUsername(String username) {
         log.info("Lock user by username: {}", username);
-        return userRepository.findByUsername(Username.of(username))
+        return userRepository.findByUserId(Username.of(username))
                 .orElseThrow(() -> new IllegalArgumentException("Username not found: " + username));
     }
 }

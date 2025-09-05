@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Username extends ValueObjectBase  {
 
     private String value;

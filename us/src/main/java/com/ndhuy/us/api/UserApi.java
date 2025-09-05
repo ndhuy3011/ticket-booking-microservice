@@ -35,7 +35,9 @@ public class UserApi {
     public ResponseEntity<CreateOutUserDto> postCreateUser(@RequestBody CreateInUserDto entity) {
         return new ResponseEntity<>(userCreateService.createUserCustomer(entity), HttpStatus.CREATED);
     }
+
     @PostMapping("/login")
+    @PublicEndpoint
     public ResponseEntity<LoginOutUserDto> postUsernameAndPassword(@RequestBody LoginInUserDto entity) {
         return new ResponseEntity<>(userQueryService.findByUsernameAndPassword(entity), HttpStatus.OK);
     }

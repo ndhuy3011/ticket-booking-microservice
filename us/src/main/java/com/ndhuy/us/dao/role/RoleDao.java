@@ -110,7 +110,7 @@ class IRoleDao implements RoleDao {
     @Override
     public Role findByName(String name, boolean exception) {
         if (exception) {
-            return roleRepository.findByRoleName(RoleName.of(name))
+            return roleRepository.findById(RoleName.of(name))
                     .orElseThrow(() -> new IllegalArgumentException("Role name not found: " + name));
         } else {
             return findByName(name);
@@ -126,7 +126,7 @@ class IRoleDao implements RoleDao {
 
     @Override
     public Role lockByName(String name) {
-        return roleRepository.findByRoleName(RoleName.of(name))
+        return roleRepository.findByRoleId(RoleName.of(name))
                 .orElseThrow(() -> new IllegalArgumentException("Username not found: " + name));
     }
 
